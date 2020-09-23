@@ -68,6 +68,11 @@ export class HanderApp {
 container.bind(HanderApp)
 
 
+/**
+ * AppCtx msg处理ctx
+ * 作用域ScopeEnum.Prototype, 子类继承
+ *
+ */
 @scope(ScopeEnum.Prototype)
 @provide()
 export class AppCtx {

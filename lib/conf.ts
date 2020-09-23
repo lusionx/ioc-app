@@ -2,8 +2,7 @@ import { container } from '../lib/glob'
 import { provide, init } from 'injection'
 import * as fs from 'fs'
 
-@provide()
-export class AppConfig {
+class ConfigItem {
     domain: string
     port: number
     cemRoot: string
@@ -15,7 +14,10 @@ export class AppConfig {
      * for kue.createQueue
      */
     kue: any
+}
 
+@provide()
+export class AppConfig extends ConfigItem {
     @init()
     async init() {
         const env = process.env['NODE_ENV'] || 'local'
