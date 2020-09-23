@@ -1,0 +1,29 @@
+{
+  "name": "c2m-auto",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "ts-node index.ts",
+    "tsc": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.20.0",
+    "dayjs": "^1.8.36",
+    "injection": "^1.8.6",
+    "kue": "^0.11.6",
+    "log4js": "^6.3.0",
+    "reflect-metadata": "^0.1.13"
+  },
+  "devDependencies": {
+    "@types/kue": "^0.11.13",
+    "@types/node": "^14.11.2",
+    "ts-node": "^9.0.0",
+    "tslib": "^2.0.1",
+    "typescript": "^3.9.7"
+  }
+}
