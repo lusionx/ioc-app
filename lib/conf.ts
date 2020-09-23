@@ -1,7 +1,6 @@
 import { container } from '../lib/glob'
 import { provide, init } from 'injection'
 import * as fs from 'fs'
-import { dirname } from 'path'
 
 @provide()
 export class AppConfig {
@@ -21,7 +20,7 @@ export class AppConfig {
     async init() {
         const env = process.env['NODE_ENV'] || 'local'
         const txt = await new Promise<string>((res, rej) => {
-            fs.readFile(dirname(__filename) + `/config.${env}.json`, { encoding: 'utf8' }, (err, data) => {
+            fs.readFile(process.env['PWD'] + `/config/config.${env}.json`, { encoding: 'utf8' }, (err, data) => {
                 err ? rej(err) : res(data)
             })
         })

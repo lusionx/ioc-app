@@ -3,8 +3,8 @@
     "port": 7001,
     "cemRoot": "http://cem.com",
     "kue": {
-        "prefix": "-q",
-        "redis": "redis://127.0.0.1:6379/0?prefix=c2m",
+        "prefix": "q",
+        "redis": "redis://127.0.0.1:6379/0?prefix=c2m-",
         "promotion": {
             "interval": 1000
         }

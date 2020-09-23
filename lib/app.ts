@@ -2,10 +2,10 @@ import { provide, inject, init, scope, ScopeEnum } from 'injection'
 import { getLogger, configure } from "log4js"
 import { container } from './glob'
 import { IncomingMessage, ServerResponse } from 'http'
-import { AppConfig } from '../config'
 import { sleep } from './tool'
 import { createQueue, Queue } from 'kue'
 import { AppService } from './svc'
+import { AppConfig } from './conf'
 
 
 @provide()
@@ -39,6 +39,13 @@ export class HanderApp {
         this.logger.info('HanderApp @init')
         return await sleep(10)
     }
+
+    regWorker(wtype: string, nw: number, ctx: AppCtx) {
+        this.queue.process(wtype, nw, (job, cb) => {
+            Object.assign(ctx, { job })
+            ctx.doit().then(cb).catch(cb)
+        })
+    }
 }
 container.bind(HanderApp)
 
@@ -65,6 +72,7 @@ export class AppCtx {
         const job = this.app.queue.createJob('dev', { url: this.req.url })
         await new Promise<void>(res => job.save(res))
         await this.app.service.redis.incr('dev')
+        this.logger.debug(this.app.service.cem.singleCampaigns)
     }
 }
 container.bind(AppCtx)

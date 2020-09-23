@@ -2,15 +2,15 @@ import { container } from '../glob'
 import { provide, inject } from 'injection'
 import axios from 'axios'
 import { Campaign } from './model'
-import { AppConfig } from '../../config'
+import { AppConfig } from '../conf'
 
 @provide()
 export class CemApi {
 
     @inject('appConfig')
-    config: AppConfig
+    protected config: AppConfig
 
-    get root() {
+    private get root() {
         return this.config.cemRoot
     }
 
