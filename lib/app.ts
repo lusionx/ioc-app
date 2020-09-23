@@ -1,12 +1,14 @@
-import { provide, inject, init, scope, ScopeEnum } from 'injection'
+import { provide, inject, init, scope, ScopeEnum, } from 'injection'
 import { getLogger, configure } from "log4js"
 import { container } from './glob'
 import { IncomingMessage, ServerResponse } from 'http'
-import { sleep } from './tool'
+import { sleep, readStream } from './tool'
 import { createQueue, Queue } from 'kue'
 import { AppService } from './svc'
 import { AppConfig } from './conf'
 
+
+type getCtx = () => Promise<AppCtx>
 
 @provide()
 export class HanderApp {
@@ -15,11 +17,23 @@ export class HanderApp {
 
     get reqHander() {
         return async (req: IncomingMessage, res: ServerResponse) => {
-            const logger = getLogger()
-            logger.debug('HanderApp', req.url)
-            const ctx = await container.getAsync<AppCtx>(AppCtx)
-            Object.assign(ctx, { req, res })
-            ctx.doit().catch()
+            const key = [req.method, req.url].join("")
+            const qctx = this.tMap.get(key)
+            if (qctx) {
+                const ctx = await qctx()
+                Object.assign(ctx, { req, res })
+                try {
+                    await ctx.doit()
+                    res.statusCode = 200
+                } catch (err) {
+                    this.logger.error(key)
+                    this.logger.error(err)
+                    res.statusCode = 500
+                }
+            } else {
+                res.statusCode = 404
+            }
+            res.end()
         }
     }
 
@@ -40,8 +54,12 @@ export class HanderApp {
         return await sleep(10)
     }
 
-    regWorker(wtype: string, nw: number, ctx: AppCtx) {
-        this.queue.process(wtype, nw, (job, cb) => {
+    protected tMap = new Map<string, getCtx>()
+
+    regWorker(wtype: string, nw: number, p: getCtx) {
+        this.tMap.set('POST/' + wtype, p)
+        this.queue.process(wtype, nw, async (job, cb) => {
+            const ctx = await p()
             Object.assign(ctx, { job })
             ctx.doit().then(cb).catch(cb)
         })
@@ -65,14 +83,21 @@ export class AppCtx {
 
     req: IncomingMessage
     res: ServerResponse
-
+    _body: any
+    get body() {
+        return this._body
+    }
     async doit() {
-        this.res.write('hello, ' + this.config.domain)
-        this.res.end()
-        const job = this.app.queue.createJob('dev', { url: this.req.url })
-        await new Promise<void>(res => job.save(res))
-        await this.app.service.redis.incr('dev')
-        this.logger.debug(this.app.service.cem.singleCampaigns)
+        if (!this.req) return
+        const txt = await readStream(this.req)
+        if (txt) {
+            try {
+                this._body = JSON.parse(txt)
+            } catch (err) {
+                this._body = {}
+                this.logger.warn('ctx.body', txt)
+            }
+        }
     }
 }
 container.bind(AppCtx)

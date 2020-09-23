@@ -1,5 +1,6 @@
 import { createInterface } from 'readline'
 import { createReadStream, writeFile as _writeFile } from 'fs'
+import { Readable } from 'stream'
 
 export function range(start: number, end: number, step: number = 1) {
     const ls: number[] = []
@@ -93,6 +94,20 @@ function _readFileLines(filename: string, callback: (err?: any, lines?: string[]
     })
     rl.on('close', () => {
         callback(undefined, ls)
+    })
+}
+
+
+export async function readStream(stream: Readable): Promise<string> {
+    const rl = createInterface({ input: stream })
+    const ls: string[] = []
+    return new Promise<string>(res => {
+        rl.on('line', (e: string) => {
+            return ls.push(e)
+        })
+        rl.on('close', () => {
+            res(ls.join('\n'))
+        })
     })
 }
 

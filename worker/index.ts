@@ -1,6 +1,7 @@
 import { provide, } from 'injection'
 import { BaseWorker } from './base'
 import { container } from '../lib/glob'
+import { sleep } from '../lib/tool'
 
 
 interface JobData {
@@ -10,7 +11,10 @@ interface JobData {
 @provide()
 export class DevWorker extends BaseWorker<JobData> {
     async doit() {
-        this.logger.info(this.job.data)
+        await super.doit()
+        const data = this.body
+        this.logger.info(data)
+        await sleep(10)
     }
 }
 container.bind(DevWorker)

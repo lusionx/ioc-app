@@ -11,5 +11,9 @@ export interface TypedJob<T = any> extends Job {
 @provide()
 export class BaseWorker<T = any> extends AppCtx {
     job: TypedJob<T>
+    get body(): T {
+        if (this.job) return this.job.data
+        return super.body
+    }
 }
 container.bind(BaseWorker)
