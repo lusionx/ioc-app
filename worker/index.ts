@@ -2,7 +2,7 @@ import { provide, } from 'injection'
 import { BaseWorker } from './base'
 import { container } from '../lib/glob'
 import { sleep } from '../lib/tool'
-import { AppUser } from '../lib/model'
+import { AppUser, UserLog } from '../lib/model'
 
 
 interface JobData {
@@ -16,7 +16,9 @@ export class DevWorker extends BaseWorker<JobData> {
         const data = this.body
         this.logger.info(data)
         await sleep(10)
-        AppUser.create({ name: 'dwxx', preferredName: 'lxing' })
+        const uu = await AppUser.create({ name: 'dwxx', preferredName: 'lxing' })
+        const ulog = await UserLog.create({ message: 'msg', userId: uu.id })
+        this.logger.info(ulog.toJSON())
     }
 }
 container.bind(DevWorker)
