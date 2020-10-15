@@ -15,11 +15,13 @@
   "license": "ISC",
   "dependencies": {
     "axios": "^0.20.0",
-    "dayjs": "^1.8.36",
     "injection": "^1.8.6",
     "kue": "^0.11.6",
     "log4js": "^6.3.0",
-    "reflect-metadata": "^0.1.13"
+    "moment": "^2.29.1",
+    "mysql2": "^2.2.5",
+    "reflect-metadata": "^0.1.13",
+    "sequelize": "^6.3.5"
   },
   "devDependencies": {
     "@types/kue": "^0.11.13",

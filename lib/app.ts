@@ -6,6 +6,8 @@ import { sleep, readStream } from './tool'
 import { createQueue, Queue } from 'kue'
 import { AppService } from './svc'
 import { AppConfig } from './conf'
+import axios from 'axios'
+import { DbModel } from './model'
 
 
 type getCtx = () => Promise<AppCtx>
@@ -44,7 +46,14 @@ export class HanderApp {
     @inject('appService')
     service: AppService
 
+    @inject('dbModel')
+    dbs: DbModel
+
     queue: Queue
+
+    get axios () {
+        return axios.create()
+    }
 
     @init()
     async init() {

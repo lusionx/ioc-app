@@ -10,6 +10,8 @@ async function main() {
     const server = createServer(pp.reqHander)
     pp.logger.info('listen http://127.0.0.1:' + pp.config.port)
     server.listen(pp.config.port)
+
+    // pp.dbs.sequelize.sync({ force: true })
 }
 
 process.nextTick(main)

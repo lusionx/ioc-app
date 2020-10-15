@@ -14,6 +14,8 @@ class ConfigItem {
      * for kue.createQueue
      */
     kue: any
+
+    dbConn: string
 }
 
 @provide()

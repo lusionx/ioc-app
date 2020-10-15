@@ -39,5 +39,6 @@
                 "level": "debug"
             }
         }
-    }
+    },
+    "dbConn": "mysql://root:123123@127.0.0.1:3306/ioc-ap"
 }
