@@ -1,9 +1,5 @@
-import {
-    Sequelize,
-    Model,
-    DataTypes,
-    Optional,
-} from "sequelize";
+import { Sequelize, Model, DataTypes, Optional, } from "sequelize";
+import { UserLog } from './user-log';
 
 
 // These are all the attributes in the User model
@@ -25,28 +21,28 @@ export class AppUser extends Model<UserAttrs, UserNewAttrs> implements UserAttrs
     // timestamps!
     public readonly createdAt!: Date;
     public readonly updatedAt!: Date;
+
+    logs: UserLog[]
 }
 
 export function init(sequelize: Sequelize) {
-    AppUser.init(
-        {
-            id: {
-                type: DataTypes.INTEGER.UNSIGNED,
-                autoIncrement: true,
-                primaryKey: true,
-            },
-            name: {
-                type: DataTypes.STRING,
-                allowNull: false,
-            },
-            preferredName: {
-                type: DataTypes.STRING,
-                allowNull: true,
-            },
+    AppUser.init({
+        id: {
+            type: DataTypes.INTEGER.UNSIGNED,
+            autoIncrement: true,
+            primaryKey: true,
         },
-        {
-            tableName: "app-user",
-            sequelize,
-        }
-    );
+        name: {
+            type: DataTypes.STRING,
+            allowNull: false,
+        },
+        preferredName: {
+            type: DataTypes.STRING,
+            allowNull: true,
+        },
+    }, {
+        tableName: "app_user",
+        freezeTableName: true,
+        sequelize,
+    });
 }

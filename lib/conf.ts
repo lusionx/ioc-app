@@ -3,6 +3,7 @@ import { provide, init } from 'injection'
 import * as fs from 'fs'
 
 class ConfigItem {
+    env: 'local' | 'test' | 'pord'
     domain: string
     port: number
     cemRoot: string
@@ -16,6 +17,10 @@ class ConfigItem {
     kue: any
 
     dbConn: string
+
+    odata: {
+        soc: string
+    }
 }
 
 @provide()

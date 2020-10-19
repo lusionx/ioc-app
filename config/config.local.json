@@ -1,4 +1,5 @@
 {
+    "env": "local",
     "domain": "test.com",
     "port": 7001,
     "cemRoot": "http://cem.com",
