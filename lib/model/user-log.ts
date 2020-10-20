@@ -40,6 +40,7 @@ export function init(sequelize: Sequelize) {
         },
     }, {
         tableName: "user_log",
+        modelName: UserLog.name,
         freezeTableName: true,
         sequelize,
     });

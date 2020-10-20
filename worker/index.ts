@@ -3,7 +3,7 @@ import { BaseWorker } from './base'
 import { container } from '../lib/glob'
 import { sleep } from '../lib/tool'
 import { AppUser, UserLog } from '../lib/model'
-
+import './wxfan-info'
 
 interface JobData {
     url: string

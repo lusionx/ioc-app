@@ -3,6 +3,7 @@ import { container } from '../glob'
 import { RedisSvc } from './redis'
 import { CemApi } from '../cem'
 import { ODataSvc } from './odata'
+import { WxProxySvc } from './wx-proxy'
 
 @provide()
 export class AppService {
@@ -14,5 +15,8 @@ export class AppService {
 
     @inject('oDataSvc')
     odata: ODataSvc
+
+    @inject('wxProxySvc')
+    wxProxy: WxProxySvc
 }
 container.bind(AppService)

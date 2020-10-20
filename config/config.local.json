@@ -10,6 +10,9 @@
             "interval": 1000
         }
     },
+    "odata": {
+        "soc": "http://od.nb.besth5.com/soc"
+    },
     "logger": {
         "appenders": {
             "app": {

@@ -24,13 +24,13 @@ export interface WeixinAccount {
 export class ODataSvc extends BaseSvc {
     async singleWxAccount(authorizer_appid: string, funcs: number[]): Promise<WeixinAccount | undefined> {
         if (!authorizer_appid) return
-        const { config, axios } = this.app
+        const { config } = this.app
         const params = {
             $filter: `authorizer_appid eq '${authorizer_appid}'`,
             $top: 9,
         }
         const headers = { Authorization: 'Bearer ' + JWT }
-        const resp = await axios.get<{ value: WeixinAccount[] }>(config.odata.soc + '/weixinAccounts', { params, headers })
+        const resp = await this.axios.get<{ value: WeixinAccount[] }>(config.odata.soc + '/weixinAccounts', { params, headers })
         let ls = resp.data.value
         if (ls.length === 0) return
         if (funcs.length === 0) return ls[ls.length - 1]

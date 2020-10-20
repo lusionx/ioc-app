@@ -42,6 +42,7 @@ export function init(sequelize: Sequelize) {
         },
     }, {
         tableName: "app_user",
+        modelName: AppUser.name,
         freezeTableName: true,
         sequelize,
     });

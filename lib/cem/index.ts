@@ -16,7 +16,7 @@ export class CemApi extends BaseSvc {
 
     async singleCampaigns(id: number) {
         const url = this.root + `/private/auto/campaigns` + id
-        const res = await this.app.axios.get<Campaign>(url)
+        const res = await this.axios.get<Campaign>(url)
         return res.data
     }
 }

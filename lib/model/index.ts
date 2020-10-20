@@ -33,3 +33,4 @@ container.bind(DbModel)
 
 export { AppUser } from './app-user'
 export { UserLog } from './user-log'
+export { WxUserinfo } from './wx-userinfo'

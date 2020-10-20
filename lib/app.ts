@@ -6,7 +6,6 @@ import { sleep, readStream } from './tool'
 import { createQueue, Queue } from 'kue'
 import { AppService } from './svc'
 import { AppConfig } from './conf'
-import axios from 'axios'
 import { DbModel } from './model'
 
 
@@ -51,10 +50,6 @@ export class HanderApp {
 
     queue: Queue
 
-    get axios () {
-        return axios.create()
-    }
-
     @init()
     async init() {
         configure(this.config.logger)
@@ -97,7 +92,7 @@ export class AppCtx {
 
     req: IncomingMessage
     res: ServerResponse
-    _body: any
+    private _body: any
     get body() {
         return this._body
     }

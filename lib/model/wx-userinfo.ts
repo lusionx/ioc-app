@@ -45,6 +45,7 @@ export function init(sequelize: Sequelize) {
     }
     WxUserinfo.init(defined, {
         tableName: "wx_userinfo",
+        modelName: WxUserinfo.name,
         freezeTableName: true,
         sequelize,
     });
