@@ -126,3 +126,5 @@ export function writeFile(path: string, data: any): Promise<void> {
         })
     })
 }
+
+export { createObjId } from './object-id'

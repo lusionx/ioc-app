@@ -1,7 +1,7 @@
 import { provide, } from 'injection'
 import { BaseWorker } from './base'
 import { container } from '../lib/glob'
-import { sleep } from '../lib/tool'
+import { sleep, createObjId } from '../lib/tool'
 import { AppUser, UserLog } from '../lib/model'
 import './wxfan-info'
 
@@ -19,6 +19,8 @@ export class DevWorker extends BaseWorker<JobData> {
         const uu = await AppUser.create({ name: 'dwxx', preferredName: 'lxing' })
         const ulog = await UserLog.create({ message: 'msg', userId: uu.id })
         this.logger.info(ulog.toJSON())
+
+        this.logger.info('%s %j', createObjId(), createObjId())
     }
 }
 container.bind(DevWorker)
