@@ -1,7 +1,7 @@
 import { provide, inject } from 'injection'
 import { container } from '../glob'
 import { RedisSvc } from './redis'
-import { CemApi } from '../cem'
+import { CemApi, WxApi } from '../cem'
 import { ODataSvc } from './odata'
 import { WxProxySvc } from './wx-proxy'
 
@@ -11,7 +11,10 @@ export class AppService {
     redis: RedisSvc
 
     @inject('cemApi')
-    cem: CemApi
+    cemApi: CemApi
+
+    @inject('wxApi')
+    wxApi: WxApi
 
     @inject('oDataSvc')
     odata: ODataSvc

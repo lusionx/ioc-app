@@ -13,25 +13,18 @@ export class WxfanInfoWorker extends BaseWorker<JobData> {
     async doit() {
         await super.doit()
         this.logger.info(this.body)
-        const { wxProxy, odata } = this.app.service
-        const ap = await odata.singleWxAccount(this.body.appid, [])
-        if (!ap) return
-        const resp = await wxProxy.userGet(ap.authorizer_access_token)
+        const { wxApi } = this.app.service
+        const resp = await wxApi.BatchOpenid(this.body.appid)
         if (resp.count && resp.data && resp.data.openid.length) {
-            await this.saveRows(this.body.appid, ap.authorizer_access_token, resp.data.openid)
+            await this.saveRows(this.body.appid, resp.data.openid)
         }
     }
 
-    async saveRows(appid: string, token: string, ids: string[]) {
-        const SIZE = 100
-        const { wxProxy } = this.app.service
-        while (ids.length) {
-            const hed = ids.slice(0, SIZE)
-            ids = ids.slice(SIZE)
-            const ulist = await wxProxy.userinfoBatch(token, hed)
-            const qs = ulist.map((u) => WxUserinfo.create({ appid: appid, openid: u.openid, userinfo: u }))
-            await Promise.all(qs)
-        }
+    async saveRows(appid: string, ids: string[]) {
+        const { wxApi } = this.app.service
+        const ulist = await wxApi.BatchUserInfo(appid, ids)
+        const qs = ulist.map((u) => WxUserinfo.create({ appid: appid, openid: u.openid, userinfo: u }))
+        await Promise.all(qs)
     }
 }
 container.bind(WxfanInfoWorker)

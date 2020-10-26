@@ -1,17 +1,12 @@
 import { container } from '../glob'
-import { provide, inject } from 'injection'
 import { Campaign } from './model'
-import { AppConfig } from '../conf'
 import { BaseSvc } from '../svc/base'
+import { provide } from 'injection'
 
 @provide()
 export class CemApi extends BaseSvc {
-
-    @inject('appConfig')
-    protected config: AppConfig
-
     private get root() {
-        return this.config.cemRoot
+        return this.app.config.cemRoot
     }
 
     async singleCampaigns(id: number) {
@@ -21,3 +16,5 @@ export class CemApi extends BaseSvc {
     }
 }
 container.bind(CemApi)
+
+export { WxApi } from './wx-api'

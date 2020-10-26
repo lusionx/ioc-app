@@ -31,6 +31,11 @@ export interface WxUserinfo {
 
 const REG_FIX = /[\u0001-\u0007\u000b\u000e-\u0016\u0018\u0019\u001a-\u001e]+/g
 
+interface WxResp {
+    errcode?: number
+    errmsg?: number
+}
+
 @provide()
 export class WxProxySvc extends BaseSvc {
     /**
@@ -43,7 +48,7 @@ export class WxProxySvc extends BaseSvc {
             count: number
             data?: { openid: string[] }
             next_openid: string
-        }
+        } & WxResp
     }
     /**
      * 批量获取userinfo func_info(2)

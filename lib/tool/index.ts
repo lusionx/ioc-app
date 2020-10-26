@@ -127,4 +127,15 @@ export function writeFile(path: string, data: any): Promise<void> {
     })
 }
 
+export function chunk<T>(rr: T[], size: number) {
+    const res: Array<Array<T>> = []
+    let i = 0
+    let ids = rr.slice(size * i, size)
+    while (ids.length) {
+        res[i++] = ids
+        ids = rr.slice(size * i, (i + 1) * size)
+    }
+    return res
+}
+
 export { createObjId } from './object-id'
