@@ -40,4 +40,6 @@ Prototype: 每次请求都重新创建, 包装外部数据, 用完销毁, AppCtx
 - 将axios的简化
 - 或者做成无限等待
 
-> 包装约定: 利用error.message, ERR{$code}{$txt}:{$txt} 使用这个约定,/^Err(\d+)(\w+):(.+)$/`
+> 包装约定: 利用error.message, ERR{$code}{$kind}:{$txt} 使用这个约定,/^Err(\d+)(\w+):(.+)$/`
+
+3位code作为http错误, 4位表示数据/字段缺失, 5位表示业务不匹配, 匹配msg约定的异常同时会按照`code-kind.log`的记录到

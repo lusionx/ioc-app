@@ -7,6 +7,9 @@ import { createQueue, Queue } from 'kue'
 import { AppService } from './svc'
 import { AppConfig } from './conf'
 import { DbModel } from './model'
+import * as moment from 'moment'
+import * as util from 'util'
+import * as fs from 'fs'
 
 
 type getCtx = () => Promise<AppCtx>
@@ -38,10 +41,13 @@ export class HanderApp {
         }
     }
 
-    saveError(key: string, err: Error) {
+    async saveError(key: string, err: Error) {
         const m = /^Err(\d+)(\w+):(.+)$/.exec(err.message);
         if (m) {
             const [, code, kind, msg] = m
+            let fpath = this.config.errDir + code + '-' + kind + '.log'
+            let txt = util.format('%s %j\n%s\n', moment().format(), { code, kind, msg }, err.stack)
+            fs.writeFileSync(fpath, txt, { flag: 'a' })
             this.logger.error('%j', { key, code, kind, msg })
         } else {
             this.logger.error(key)

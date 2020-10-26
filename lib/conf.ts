@@ -11,6 +11,11 @@ class ConfigItem {
      * for log4js.configure
      */
     logger: any
+
+    /**
+     * 业务异常
+     */
+    errDir: string
     /**
      * for kue.createQueue
      */

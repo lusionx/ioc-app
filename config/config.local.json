@@ -13,6 +13,7 @@
     "odata": {
         "soc": "http://od.nb.besth5.com/soc"
     },
+    "errDir": "./logs/",
     "logger": {
         "appenders": {
             "app": {
