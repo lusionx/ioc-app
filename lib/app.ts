@@ -20,22 +20,33 @@ export class HanderApp {
         return async (req: IncomingMessage, res: ServerResponse) => {
             const key = [req.method, req.url].join("")
             const qctx = this.tMap.get(key)
-            if (qctx) {
-                const ctx = await qctx()
-                Object.assign(ctx, { req, res })
-                try {
-                    await ctx.doit()
-                    res.statusCode = 200
-                } catch (err) {
-                    this.logger.error(key)
-                    this.logger.error(err)
-                    res.statusCode = 500
-                }
-            } else {
+            if (!qctx) {
                 res.statusCode = 404
+                return res.end(key)
             }
-            res.end()
+            const ctx = await qctx()
+            Object.assign(ctx, { req, res })
+            try {
+                await ctx.doit()
+                res.statusCode = 200
+                res.end()
+            } catch (err) {
+                this.saveError(key, err)
+                res.statusCode = 500
+                res.end(err.message)
+            }
         }
+    }
+
+    saveError(key: string, err: Error) {
+        const m = /^Err(\d+)(\w+):(.+)$/.exec(err.message);
+        if (m) {
+            const [, code, kind, msg] = m
+            this.logger.error('%j', { key, code, kind, msg })
+        } else {
+            this.logger.error(key)
+        }
+        this.logger.error(err)
     }
 
     get logger() {

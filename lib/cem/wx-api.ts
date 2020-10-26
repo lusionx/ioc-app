@@ -29,7 +29,7 @@ export class WxApi extends BaseSvc {
      * @param openids 会拆成100个一组
      */
     async BatchUserInfo(appid: string, openids: string[]) {
-        const { wxApi, } = this.app.service
+        const { wxProxy, } = this.app.service
         const ap = await this.cachedApp(appid)
         if (!ap) throw new Error("Err40000MissWxAccount:" + appid);
         const SIZE = 100
@@ -37,7 +37,7 @@ export class WxApi extends BaseSvc {
         const list: WxUserinfo[] = []
         const qs = rr.map(ids => {
             return async () => {
-                const resp = await wxApi.BatchUserInfo(appid, ids)
+                const resp = await wxProxy.userinfoBatch(ap.authorizer_access_token, ids)
                 list.push(...resp)
             }
         })
